@@ -1,0 +1,118 @@
+1)Scrieti o functie nrVocale care primeste ca parametru o lista desiruri de caractere si calculeaza numarul total de vocale din sirurile palindrom. Pentru a verifica daca un sir palindrom, puteti folosi functia reverse, iar pentru a cauta un element într-o lista, puteti 
+folosi functia elem. Puteti defini functii auxiliare
+
+nrVocale lista = sum (map numarVocalePalindrom lista) -- map face sa treaca prin fiecare element al functiei 
+
+estePalindrom s = s == reverse s -- reverse primeste o lista si o intoarce cu elementele invers
+
+numarVocale s = length (filter (\c -> elem c "aeiouAEIOU") s) -- nr de vocale din sirul s 
+--filter (\c -> elem c "aeiouAEIOU") functie anonima care intoarce true daca caracterul e vocala 
+-- => filter trece doar prin caracterele care sunt vocale 
+
+numarVocalePalindrom s
+  | estePalindrom s = numarVocale s
+  | otherwise = 0
+
+2)Scrieti o functie care primeste ca parametri un numar si o lista de întregi si adauga numarul dat dupa fiecare element par din lista.
+Sa se scrie si prototipul functiei.
+
+adaugaDupaPar _ [] = []  -- Caz de oprire: lista vidă, returnează lista vidă
+adaugaDupaPar numar (x:xs) --avem numarul care trebuie adaugat si trecem prin toate numerele din lista
+    | even x = x : numar : adaugaDupaPar numar xs  -- daca x este par, adaug numar dupa x 
+    | otherwise = x : adaugaDupaPar numar xs  -- Păstrează elementele impare și continuă cu restul listei
+
+3)Scrieti o functie care determina lista divizorilor unui numar întreg primit ca parametru. Sa se scrie si prototipul functiei.
+
+divizori n = [x | x <- [1..n], n `mod` x == 0]
+
+-- x<-[1..n] = x trece prin fiecare element din lista [1..n]
+-- cu conditia ca n mod x == 0 
+-- n = x cu proprietatea ca n mod x == 0 pentru numerele de la 1 la n 
+
+4)Scrieti o functie care primeste ca parametru o lista de numere întregi si întoarce lista listelor de divizori. 
+
+listaDivizori lista = [ divizori x | x <- lista ] -- primeste lista de divizori a lui x cu proprietatea ca x trece prin lista
+    where divizori n = [x | x <- [1..n], n `mod` x == 0]
+
+5) Scrieti o functie care primeste ca parametri:
+• doua numere întregi ce reprezinta limita inferioara si cea superioara a unui interval închis si
+• o lista de numere întregi 
+si întoarce numerele din lista ce apartin intervalului. De exemplu:
+-- inInterval 5 10 [1..15] == [5,6,7,8,9,10]
+-- inInterval 5 10 [1,3,5,2,8,-1] == [5,8]
+a) Definiti functia recursiv si denumiti-o inIntervalRec.
+b) Folositi descrieri de liste. Denumiti functia inIntervalComp.
+
+a)
+inIntervalRec _ _ [] = []
+inIntervalRec primul ultimul (x:xs) --primeste primul si ultimul nr din interval si lista 
+  | x >= primul && x <= ultimul = x : inIntervalRec primul ultimul xs -- daca e mai mare ca primul si mai mic ca ultimul fa o lista cu ele
+  | otherwise = inIntervalRec primul ultimul xs --altfel treci la urmatorul cu aceeasi parametri de primul si ultimul 
+
+b)
+inIntervalComp primul ultimul lista = [x | x <- lista, x >= primul && x <= ultimul] 
+-- fa o lista cu x care trece prin lista atata timp cat x mai mare decat primul si mai mic decat ultimul 
+
+6) Scrieti o functie care numara câte numere strict pozitive sunt într-o lista data ca argument. De exemplu:
+-- pozitive [0,1,-3,-2,8,-1,6] == 3
+a) Definiti functia recursiv si denumiti-o pozitiveRec.
+b) Folositi descrieri de liste. Denumiti functia pozitiveComp.
+Hint: Nu puteti folosi recursivitate. Veti avea nevoie de o functie de agregare (consultat modulul Data.List). De ce nu e posibil sa scriem pozitiveComp folosind doar descrieri de liste?
+
+a)
+pozitiveRec [] = 0
+pozitiveRec (x:xs)
+  | x > 0 = 1 + pozitiveRec xs
+  | otherwise = pozitiveRec xs
+
+b)
+import Data.List (genericLength)
+
+pozitiveComp lista = fromIntegral $ genericLength [x | x <- lista, x > 0]
+
+7)Scrieti o functie care întoarce lista pozitiilor elementelor impare dintr-o lista de numere primita ca parmetru. De exemplu:
+-- pozitiiImpare [0,1,-3,-2,8,-1,6,1] == [1,2,5,7]
+
+a) Definiti functia recursiv si denumiti-o pozitiiImpareRec.
+Hint: folositi o functie ajutatoare, cu un parametru în plus reprezentând pozitia curenta din lista.
+b) Folositi descrieri de liste. Denumiti functia pozitiiImpareComp.
+Hint: folositi functia zip pentru a asocia pozitii elementelor listei (puteti gasi un exemplu în curs).
+
+a)
+pozitiiImpareRec lista = pozitiiImpareRecAux lista 0 -- porneste numaratoarea pozitiilor de la 0 
+  where
+    pozitiiImpareRecAux [] _ = [] -- cazul in care lista e vida
+    pozitiiImpareRecAux (x:xs) pozitie -- primeste lista si pozitia 
+      | odd x = pozitie : pozitiiImpareRecAux xs (pozitie + 1) -- daca x e impar atunci intoarce o lista cu pozitii si treci mai departe
+      | otherwise = pozitiiImpareRecAux xs (pozitie + 1) -- daca nu, treci mai departe
+
+b)
+pozitiiImpareComp lista = [pozitie | (element, pozitie) <- zip lista [0..], odd element]
+
+-- zip primeste 2 liste si intoarce o lista cu corespondentul din fiecare 
+
+--ghci> zip [1, 2, 3] ['a', 'b', 'c']
+--[(1, 'a'), (2, 'b'), (3, 'c')]
+
+8)Scrieti o functie care calculeaza produsul tuturor cifrelor care apar într-un sir de caracter primit ca parametru. Daca sirul nu contine cifre, functia întoarce 1 . 
+De exemplu:
+-- multDigits "The time is 4:25" == 40
+-- multDigits "No digits here!" == 1
+a) Definiti functia recursiv si denumiti-o multDigitsRec.
+b) Folositi descrieri de liste. Denumiti functia multDigitsComp
+Hint: Veti avea nevoie de functia isDigit care verifica daca un caracter e cifra si de functia digitToInt care transforma un caracter în cifra. Cele 2 functii se afla în pachetul Data.Char.
+
+a)
+import Data.Char (isDigit, digitToInt)
+
+multDigitsRec [] = 1 -- primul produs e 1
+multDigitsRec (c:cs)
+  | isDigit c = digitToInt c * multDigitsRec cs -- daca e cifra inmulteste cu produsul de pana acum
+  | otherwise = multDigitsRec cs --altfel treci la urmatorul 
+
+b)
+import Data.Char (isDigit, digitToInt)
+
+multDigitsComp str = product [digitToInt c | c <- str, isDigit c]
+
+

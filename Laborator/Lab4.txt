@@ -1,0 +1,81 @@
+1) Reamintiti-va definirea listelor prin selectie din Laboratorul 3. Încercati sa aflati valoareabexpresiilor de mai jos (fara a folosi interpretorul), iar apoi verificati-va raspunsurile folosind ghci.
+{-
+a)[ xˆ2 |x <- [1..10], x `rem` 3 == 2 ]
+b)[ (x,y) | x <- [1..5], y <- [x..(x+2)] ]
+c)[ (x,y) | x <- [1..3], let k = xˆ2, y <- [1..k] ]
+d)[ x | x <- "Facultatea de Matematica si Informatica", elem x ['A'..'Z'] ]
+e)[ [x..y] | x <- [1..5], y <- [1..5], x < y ]
+-}
+
+a)[x^2 |x <- [1..10], x `rem` 3 == 2] => [4,25,64]-- se face o lista cu x^2 din lista [1..10] cu proprietatea ca restul dintre x si 3 este 2
+-- rem e aceeasi cu mod 
+
+b)[ (x,y) | x <- [1..5], y <- [x..(x+2)] ] -- se face o lista cu perechile (x,y), x din [1..5] si y din intervalul [x..(x+2)]
+
+Adica => [(1,1),(1,2),(1,3),(2,2),(2,3),(2,4),(3,3),(3,4),(3,5),(4,4),(4,5),(4,6),(5,5),(5,6),(5,7)]
+
+
+c)[ (x,y) | x <- [1..3], let k = x^2, y <- [1..k] ]-- se face o lista cu perechile (x,y), x din [1..3] si y din [1..x^2]
+
+Adica => [(1,1),(2,1),(2,2),(2,3),(2,4),(3,1),(3,2),(3,3),(3,4),(3,5),(3,6),(3,7),(3,8),(3,9)]
+
+d)[ x | x <- "Facultatea de Matematica si Informatica", elem x ['A'..'Z'] ] -- se face o lista cu x, din sirul respectiv, iar x ia doar valorile care sunt majuscule
+
+e) [ [x..y] | x <- [1..5], y <- [1..5], x < y ] -- se face o lista cu intervale [x..y], cu x care ia valori de la [1..5] si y care ia valori de la [1..5] cu proprietatea ca x<y 
+Adica => [[1,2],[1,2,3],[1,2,3,4],[1,2,3,4,5],[2,3],[2,3,4],[2,3,4,5],[3,4],[3,4,5],[4,5]]
+
+2) Definiti o functie factori care întoarce lista divizorilor pozitivi ai unui numar primit ca parametru. Folositi doar metoda de definirea listelor prin selectie.
+
+factori n = [x | x <- [1..n], n `mod` x == 0]
+
+3) Folosind functia factori, definiti predicatul prim, care verifica daca un numar primit ca parametru este prim.
+
+factori n = [x | x <- [1..n], n `mod` x == 0]
+
+prim n = factori n == [1, n]
+
+4). Definiti functia numerePrime, care pentru un numar n primit ca parametru, întoarce lista numerelor prime din intervalul [2..n].Folositi metoda de definire a listelor prin selectie s functiile definite anterior
+
+numerePrime n = [x | x <- [2..n], prim x ]
+
+6) Scrieti o functie generica firstEl care primeste ca parametru o lista de perechi de tip (a,b) si întoarce lista primelor elementelor din fiecare pereche:
+
+firstEl lista = [x | (x, _) <- lista]
+
+7)Scrieti functia sumList care are ca parametru o lista de liste de valori Int si întoarce lista sumelor elementelor din fiecare lista (suma elementelor unei liste de întregi se calculeaza cu functia sum):
+
+sumList lista = [ sum lista1 | lista1 <- lista ]
+
+8) Scrieti o functie prel2 care are ca parametru o lista de întregi (Int) si întoarce o lista în care elementele pare sunt înjumatatite, iar cele impare sunt dublate:
+
+prel2 lista = [if even x then x `div` 2 else x*2 | x <- lista]
+
+9)Scrieti o functie care primeste ca parametri un caracter si o lista de siruri de caractere, si întoarce lista sirurilor care contin caracterul primit ca argument (hint: folositi functia elem).
+
+functie c lista = filter (elem c) lista 
+
+10) Scrieti o functie care are ca parametru o lista de întregi si întoarce lista patratelor numerelor impare din acea lista.
+
+dublu lista = [ x^2 | x <- lista, x `mod` 2 == 1]
+
+11)Scrieti o functie care primeste ca argument o lista de întregi si întoarce lista patratelor elementelor din pozitii impare. Hint: folositi zip pentru a avea acces la pozitia elementelor.
+
+patratePozitiiImpare lista = [x^2 | (x, index) <- zip lista [1..], odd index]
+-- zip lista [1..] formeaza o lista intre elemente si pozitiile lor din lista
+
+12)Scrieti o functie care primeste ca parametru o lista de siruri de caractere si întoarce lista obtinuta prin eliminarea consoanelor din fiecare sir.
+
+eliminaConsoane listaSiruri = [[c | c <- sir, not (c `elem` "aeiouAEIOU")] | sir <- listaSiruri]
+
+13)Definiti recursiv functiile mymap si myfilter cu aceeasi functionalitate ca a functiilor map si filter predefinite.
+
+mymap _ [] = []   -- cazul de bază: lista goală
+mymap f (x:xs) = f x : mymap f xs
+
+-- myfilter
+myfilter :: (a -> Bool) -> [a] -> [a]
+myfilter _ [] = []  -- cazul de bază: lista goală
+myfilter p (x:xs)
+  | p x       = x : myfilter p xs  -- adaugă elementul la rezultat dacă predicate p este adevărată
+  | otherwise = myfilter p xs       -- ignoră elementul dacă predicate p este falsă
+

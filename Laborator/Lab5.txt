@@ -1,0 +1,32 @@
+foldr - fold(indeplineste functia) de la dreapta la stanga 
+-- Exemplu: suma [1, 2, 3] va fi 1 + (2 + (3 + 0)) = 6
+
+foldl - fold(indeplineste functia) de la stanga la dreapta
+-- Exemplu: suma [1, 2, 3] va fi ((0 + 1) + 2) + 3 = 6
+
+1. Calculati suma patratelor elementelor impare dintr-o lista data ca parametru. 
+
+sumaPatrateImpare lista = foldl (\acc x -> if odd x then acc + x^2 else acc) 0 lista
+--acc = acumulator 
+
+2. Scrieti o functie care verifica ca toate elementele dintr-o lista sunt True, folosind foldr
+
+toateTrue lista = foldr (&&) True lista
+
+3.Scrieti o functie care verifica daca toate elementele dintr-o lista de numere întregi satisfac o proprietate data ca parametru. 
+
+verificaProprietate prop lista = foldr (\x acc -> prop x && acc) True lista
+
+4.Scrieti o functie care verifica daca exista elemente într-o lista de numere întregi care satisfac o proprietate data ca parametru.
+
+existaElementCuProprietate prop lista = foldr (\x acc -> prop x || acc) False lista
+
+5. Redefiniti functiile map si filter folosind foldr. Le puteti numi mapFoldr si filterFoldr.
+
+mapFoldr f lista = foldr (\x acc -> f x : acc) [] lista
+--(\x acc -> f x : acc) => Adaugă la acc rezultatul aplicării funcției f asupra lui x.
+
+filterFoldr p lista = foldr (\x acc -> if p x then x : acc else acc) [] lista
+--(\x acc -> if p x then x : acc else acc) este funcția anonimă dată ca argument către foldr. Această funcție primește un element x și un acumulator acc. Adaugă la acc elementul x doar dacă predicatul p este adevărat pentru x.
+
+6.

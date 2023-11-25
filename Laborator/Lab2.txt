@@ -1,0 +1,102 @@
+1) Scrietii o functiee poly cu patru argumente de tip Double (a,b,c,x) care calculează a*xˆ2+b*x+c. Scrietisi signatura functiei (poly :: ??).
+
+ poly a b c x = a*x^2+b*x+c
+
+2)Scrieti o functie eeny care întoarce stringul “eeny” atunci când primeste ca input un număr par si “meeny” când primeste ca input un număr impar. Hint: puteti folosi functia even, despre care puteti citi pe https://hoogle.haskell.org/).
+
+eeny x = if even x then "eeny" else "meeny"
+
+3) Scrieti o funcie fizzbuzz care întoarce “Fizz” pentru numerele divizibile cu 3, “Buzz” pentru numerele divizibile cu 5 si “FizzBuzz” pentru numerele divizibile cu ambele. Pentru orice alt număr întoarce sirul vid. Scrieti două definitii pentru functia fizzbuzz: una folosind if si una folosind gărzi (conditii). Hint: pentru a calcula restul împărtirii unui număr la un alt număr puteti folosi functia mod.
+
+fizzbuzz n = if (n `mod` 3 == 0) && (n `mod` 5 == 0)
+              then "FizzBuzz"
+              else if n `mod` 3 == 0
+                   then "Fizz"
+                   else if n `mod` 5 == 0
+                        then "Buzz"
+                        else ""
+
+fizzbuzz n
+  | n `mod` 3 == 0 && n `mod` 5 == 0 = "FizzBuzz"
+  | n `mod` 3 == 0 = "Fizz"
+  | n `mod` 5 == 0 = "Buzz"
+  | otherwise = ""
+
+4)Fibonacci
+
+fibonacciCazuri n
+    | n < 2     = n
+    | otherwise = fibonacciCazuri (n - 1) + fibonacciCazuri (n - 2)
+
+sau : 
+
+fibonacciEcuational 0 = 0
+fibonacciEcuational 1 = 1
+fibonacciEcuational n =
+    fibonacciEcuational (n - 1) + fibonacciEcuational (n - 2)
+
+5) Tribonacci 
+
+tribonacciCazuri n 
+    | n == 1    = 1 
+    | n == 2    = 1 
+    | n == 3    = 2
+    | otherwise = tribonacciCazuri (n-1) + tribonacciCazuri (n-2) + tribonacciCazuri (n-3)
+
+sau :
+
+tribonacciEcuational 1 = 1
+tribonacciEcuational 2 = 1
+tribonacciEcuational 3 = 2
+tribonacciEcuational n =
+    tribonacciEcuational (n-1) + tribonacciEcuational (n-2) + tribonacciEcuational (n-3)
+
+6)Scrieti o functie recursivă care calculează coeficientii binomiali. Coeficient, ii sunt determinati folosind urmatoarele ecuatii: 
+B(n,k) = B(n-1,k) + B(n-1,k-1)
+B(n,0) = 1
+B(0,k) = 0
+
+coeficientiBinomiali n k
+    | k == 0 = 1
+    | n == 0 = 0
+    | otherwise = coeficientiBinomiali (n-1)k + coeficientiBinomiali (n-1) (k-1)
+
+7 ) Implementati urmatoarele functii folosind liste: 
+a) verifL - verifică dacă lungimea unei liste date ca parametru este pară.
+
+verifL lista = even ( length lista) 
+
+b) takefinal - pentru o listă l dată ca parametru si un număr n, întoarce o listă care contine ultimele n elemente ale listei l. Dacă lista are mai putin de n elemente, întoarce lista nemodificată.
+
+takefinal l n 
+   | length l < n = l 
+   | otherwise = drop (length l - n) l
+
+c) remove - pentru o listă si un număr n, întoarce lista primită ca parametru din care se sterge elementul de pe pozitia n. (Hint: puteti folosi functiile take si drop). Scrieti si prototipul functiei.
+
+remove :: Int -> [a] -> [a]
+remove n lista
+  | n < 0 = lista          
+  | n >= length lista = lista  
+  | otherwise = take n lista ++ drop (n + 1) lista
+
+8) Scrieti următoarele functii folosind conceptul de recursivitate:
+a) myreplicate - pentru un întreg n si o valoare v, întoarce lista ce contine n elemente egale cu v. Să se scrie si prototipul functiei.
+
+myreplicate :: Int -> a -> [a]
+myreplicate n v 
+    | n <= 0 = []
+    | otherwise = v : myreplicate (n-1 )v
+
+b) sumImp - pentru o listă de numere întregi, calculează suma elementelor impare. Să se scrie si prototipul functiei.
+
+sumImp (x:xs)
+    | odd x = x + sumImp xs
+    | otherwise = sumImp xs
+
+c) totalLen - pentru o listă de siruri de caractere, calculează suma lungimilor sirurilor care încep cu caracterul ‘A’.
+
+totalLen [] = 0  
+totalLen (s:strs)
+    | not (null s) && head s == 'A' = length s + totalLen strs
+    | otherwise = totalLen strs
