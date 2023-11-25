@@ -1,0 +1,19 @@
+8. Scrieti următoarele functii in haskell:
+a) o functie cu doi parametri care calculează suma pătratelor lor;
+b) o functie cu un parametru ce întoarce stringul “par” dacă parametrul este par si “impar” altfel;
+c) o functie care calculează factorialul unui număr;
+d) o functie care verifică dacă primul parametru este mai mare decât dublul celui de-al doilea
+parametru;
+e) o functie care calculează elementul maxim al unei liste.
+
+a) sumaParitate x y = x^2 + y^2 
+
+b) verificaParitate x = if even x then "par" else "impar"
+
+c) factorial n = if n == 0 then 1 else n * factorial (n - 1)
+
+d) verificaDiferenta x y = if x > y*2 then x else y 
+
+e) maximLista [] = error "Lista este goală"
+maximLista [x] = x
+maximLista (x:xs) = max x (maximLista xs)
